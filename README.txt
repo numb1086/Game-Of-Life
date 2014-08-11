@@ -5,6 +5,6 @@
   ->getNewGeneration(Biology bio,int genNum)
 2.Biology
   ->initailBiology(int bioNumber)
-  ->boolean isSurvival(int column,int row)
+  ->isSurvival(int column,int row)
   ->setNewGeneration(int column,int row,boolean isSurvival)
   ->setBiology()
