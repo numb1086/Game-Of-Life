@@ -58,8 +58,7 @@ public class Biology
 		if(countBio==1) isSurvival = true;
 		//死亡
 		else if(countBio>=2) isSurvival =  false;
-//		if(isSurvival || countBio==0)
-//			System.out.println("column="+column+" row="+row+" countBio="+countBio+" isSurvival="+isSurvival);
+		
 		return isSurvival;
 	}
 	//設定新世代的繁衍或死亡
@@ -74,7 +73,7 @@ public class Biology
 			if((column+Rc)<0) Rc++;
 			if((row+Rr)<0) Rr++;
 			if((column+Rc)>=size) Rc--;
-			if((row+Rr)>=size) Rr--;		
+			if((row+Rr)>=size) Rr--;	
 			//若亂數分配在原點或死亡的點就重來
 			if((Map.get(column+Rc).get(row+Rr).equals("@ ") && !isSurvival((column+Rc),(row+Rr)))
 				||((column+Rc)==column && (row+Rr)==row)){
