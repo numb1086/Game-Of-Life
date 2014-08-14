@@ -13,13 +13,14 @@ import java.util.Random;
 
 public class Biology 
 {
-	private LinkedList<LinkedList<String>> map;
+	private LinkedList<LinkedList<String>> Map;
+	private LinkedList<LinkedList<String>> newMap;
 	private Random ran = new Random();
 	private int size,countBio;
 	
-	public Biology(LinkedList<LinkedList<String>> map,int size,int bioNumber)
+	public Biology(LinkedList<LinkedList<String>> Map,int size,int bioNumber)
 	{
-		this.map = map;
+		this.Map = Map;
 		this.size = size;
 		initailBiology(bioNumber);
 	}
@@ -31,54 +32,68 @@ public class Biology
 			//如果每列生物達15隻就停止迴圈
 			for(countBio=0;countBio<bioNumber/size;){
 				int r = ran.nextInt(size);//亂數0~29
-				map.get(column).set(r, "@ ");
+				Map.get(column).set(r, "@ ");
 				//判斷該列目前生物有幾隻
 				countBio = 0;
 				for(int row=0;row<size;row++)
-					if(map.get(column).get(row).equals("@ ")) countBio++;
+					if(Map.get(column).get(row).equals("@ ")) countBio++;
 			}
 	}
 	//判斷生物是否存活
 	private boolean isSurvival(int column,int row)
 	{
-		boolean isSurvival = false;
+		boolean isSurvival = true;
+		//System.out.println("column= "+ column+" row="+row);
 		countBio = 0;
 		//判斷該點周遭九宮格內是否有生物，減就是向左或向上，加就是向右或向下
-		if((column-1>=0 && row-1>=0) && map.get(column-1).get(row-1).equals("@ ")) countBio++;
-		if((column+1<size && row-1>=0) && map.get(column+1).get(row-1).equals("@ ")) countBio++;
-		if((column-1>=0 && row+1<size) && map.get(column-1).get(row+1).equals("@ ")) countBio++;
-		if((column+1<size && row+1<size) && map.get(column+1).get(row+1).equals("@ ")) countBio++;
-		if(column+1<size && map.get(column+1).get(row).equals("@ ")) countBio++;
-		if(column-1>=0 && map.get(column-1).get(row).equals("@ ")) countBio++;
-		if(row+1<size && map.get(column).get(row+1).equals("@ ")) countBio++;
-		if(row-1>=0 && map.get(column).get(row-1).equals("@ ")) countBio++;
+		if((column-1>=0 && row-1>=0) && Map.get(column-1).get(row-1).equals("@ ")) countBio++;
+		if((column+1<size && row-1>=0) && Map.get(column+1).get(row-1).equals("@ ")) countBio++;
+		if((column-1>=0 && row+1<size) && Map.get(column-1).get(row+1).equals("@ ")) countBio++;
+		if((column+1<size && row+1<size) && Map.get(column+1).get(row+1).equals("@ ")) countBio++;
+		if(column+1<size && Map.get(column+1).get(row).equals("@ ")) countBio++;
+		if(column-1>=0 && Map.get(column-1).get(row).equals("@ ")) countBio++;
+		if(row+1<size && Map.get(column).get(row+1).equals("@ ")) countBio++;
+		if(row-1>=0 && Map.get(column).get(row-1).equals("@ ")) countBio++;
 		//繁衍
 		if(countBio==1) isSurvival = true;
 		//死亡
 		else if(countBio>=2) isSurvival =  false;
-		
+//		if(isSurvival || countBio==0)
+//			System.out.println("column="+column+" row="+row+" countBio="+countBio+" isSurvival="+isSurvival);
 		return isSurvival;
 	}
 	//設定新世代的繁衍或死亡
 	private void setNewGeneration(int column,int row,boolean isSurvival)
 	{
-		int r = ran.nextInt(3)-1;//亂數產生 -1,0,1
+		int Rc = ran.nextInt(3)-1;//亂數產生 -1,0,1
+		int Rr = ran.nextInt(3)-1;//亂數產生 -1,0,1
+		//將存活的生物先畫在新地圖上
+		if(countBio<=1) newMap.get(column).set(row,"@ ");
 		if(isSurvival && countBio!=0){//繁衍
-			//設立邊界條件，超出邊界則重新分配
-			if((column+r)>=0 && (row+r)>=0 && (column+r)<size && (row+r)<size)
-				map.get(column+r).set(row+r,"@ ");
-			else 
+			//設立邊界條件，超出邊界則將其設定為邊界
+			if((column+Rc)<0) Rc++;
+			if((row+Rr)<0) Rr++;
+			if((column+Rc)>=size) Rc--;
+			if((row+Rr)>=size) Rr--;		
+			System.out.println("(column)="+(column)+" (row)="+(row)+" (column+Rc)="+(column+Rc)+" (row+Rr)="+(row+Rr));
+			//若亂數分配在原點或死亡的點重來
+			if(Map.get(column+Rc).get(row+Rr).equals("@ ") && !isSurvival((column+Rc),(row+Rr))
+					&& (column+Rc)==column || (row+Rr)==row){
 				setNewGeneration(column,row,isSurvival(column,row));
+			}else 
+				newMap.get(column+Rc).set(row+Rr,"@ ");	
 		}
 		else if(countBio!=0)//死亡
-			map.get(column).set(row, "- ");
+			newMap.get(column).set(row, "- ");
 	}
 	//設定生物繁衍或死亡
-	public void setBiology()
+	public void setBiology(LinkedList<LinkedList<String>> Map,LinkedList<LinkedList<String>> nextMap)
 	{
+		this.Map = Map;
+		this.newMap = nextMap;
 		for(int column=0;column<size;column++)
 			for(int row=0;row<size;row++)
-				if(map.get(column).get(row).equals("@ "))
+				if(Map.get(column).get(row).equals("@ "))
 					setNewGeneration(column,row,isSurvival(column,row));//設定新的世代
 	}	
 }

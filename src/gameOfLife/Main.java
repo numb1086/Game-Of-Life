@@ -14,7 +14,7 @@ public class Main
 	{
 		//初始化環境大小與生物總數
 		Environment env = new Environment(30);
-		Biology bio = new Biology(env.map,env.size,450);
+		Biology bio = new Biology(env.Map,env.size,450);
 		//將生物放入環境及設定世代數並顯示結果
 		env.getNewGeneration(bio,100);
 	}
