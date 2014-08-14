@@ -75,9 +75,9 @@ public class Biology
 			if((row+Rr)>=size) Rr--;	
 			//若亂數分配在死亡的點或原來的點就重來
 			if((Map.get(column+Rc).get(row+Rr).equals("@ ") && !isSurvival((column+Rc),(row+Rr)))
-				|| ((column+Rc)==column && (row+Rr)==row)){
+				|| ((column+Rc)==column && (row+Rr)==row))
 				setNewGeneration(column,row,isSurvival(column,row));
-			}else 
+			else 
 				newMap.get(column+Rc).set(row+Rr,"@ ");	
 		}
 		else if(!isSurvival)//死亡
