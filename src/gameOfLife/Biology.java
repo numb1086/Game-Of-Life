@@ -70,15 +70,14 @@ public class Biology
 		//將存活的生物先畫在新地圖上
 		if(countBio<=1) newMap.get(column).set(row,"@ ");
 		if(isSurvival && countBio!=0){//繁衍
-			//設立邊界條件，超出邊界則將其設定為邊界
+			//設立邊界，超出邊界則將其設定為邊界
 			if((column+Rc)<0) Rc++;
 			if((row+Rr)<0) Rr++;
 			if((column+Rc)>=size) Rc--;
 			if((row+Rr)>=size) Rr--;		
-			System.out.println("(column)="+(column)+" (row)="+(row)+" (column+Rc)="+(column+Rc)+" (row+Rr)="+(row+Rr));
-			//若亂數分配在原點或死亡的點重來
-			if(Map.get(column+Rc).get(row+Rr).equals("@ ") && !isSurvival((column+Rc),(row+Rr))
-					&& (column+Rc)==column || (row+Rr)==row){
+			//若亂數分配在原點或死亡的點就重來
+			if((Map.get(column+Rc).get(row+Rr).equals("@ ") && !isSurvival((column+Rc),(row+Rr)))
+				||((column+Rc)==column && (row+Rr)==row)){
 				setNewGeneration(column,row,isSurvival(column,row));
 			}else 
 				newMap.get(column+Rc).set(row+Rr,"@ ");	
