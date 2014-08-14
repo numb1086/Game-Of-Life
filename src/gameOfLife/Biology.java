@@ -42,8 +42,7 @@ public class Biology
 	//判斷生物是否存活
 	private boolean isSurvival(int column,int row)
 	{
-		boolean isSurvival = true;
-		//System.out.println("column= "+ column+" row="+row);
+		boolean isSurvival = true;//周遭生物不超過2個就存活
 		countBio = 0;
 		//判斷該點周遭九宮格內是否有生物，減就是向左或向上，加就是向右或向下
 		if((column-1>=0 && row-1>=0) && Map.get(column-1).get(row-1).equals("@ ")) countBio++;
@@ -54,7 +53,6 @@ public class Biology
 		if(column-1>=0 && Map.get(column-1).get(row).equals("@ ")) countBio++;
 		if(row+1<size && Map.get(column).get(row+1).equals("@ ")) countBio++;
 		if(row-1>=0 && Map.get(column).get(row-1).equals("@ ")) countBio++;
-
 		//死亡
 		if(countBio>2) isSurvival =  false;
 		
