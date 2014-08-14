@@ -54,10 +54,9 @@ public class Biology
 		if(column-1>=0 && Map.get(column-1).get(row).equals("@ ")) countBio++;
 		if(row+1<size && Map.get(column).get(row+1).equals("@ ")) countBio++;
 		if(row-1>=0 && Map.get(column).get(row-1).equals("@ ")) countBio++;
-		//繁衍
-		if(countBio==1) isSurvival = true;
+
 		//死亡
-		else if(countBio>=2) isSurvival =  false;
+		if(countBio>2) isSurvival =  false;
 		
 		return isSurvival;
 	}
@@ -67,21 +66,21 @@ public class Biology
 		int Rc = ran.nextInt(3)-1;//亂數產生 -1,0,1
 		int Rr = ran.nextInt(3)-1;//亂數產生 -1,0,1
 		//將存活的生物先畫在新地圖上
-		if(countBio<=1) newMap.get(column).set(row,"@ ");
-		if(isSurvival && countBio!=0){//繁衍
+		if(countBio<=2) newMap.get(column).set(row,"@ ");
+		if(countBio==1){//繁衍
 			//設立邊界，超出邊界則將其設定為邊界
 			if((column+Rc)<0) Rc++;
 			if((row+Rr)<0) Rr++;
 			if((column+Rc)>=size) Rc--;
 			if((row+Rr)>=size) Rr--;	
-			//若亂數分配在原點或死亡的點就重來
+			//若亂數分配在死亡的點或原來的點就重來
 			if((Map.get(column+Rc).get(row+Rr).equals("@ ") && !isSurvival((column+Rc),(row+Rr)))
-				||((column+Rc)==column && (row+Rr)==row)){
+				|| ((column+Rc)==column && (row+Rr)==row)){
 				setNewGeneration(column,row,isSurvival(column,row));
 			}else 
 				newMap.get(column+Rc).set(row+Rr,"@ ");	
 		}
-		else if(countBio!=0)//死亡
+		else if(!isSurvival)//死亡
 			newMap.get(column).set(row, "- ");
 	}
 	//設定生物繁衍或死亡
